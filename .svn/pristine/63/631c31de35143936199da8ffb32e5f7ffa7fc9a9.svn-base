@@ -1,0 +1,36 @@
+<table>
+<tr>
+    <th>semestre</th>
+    <th>unidades</th>
+    <th>curso</th>
+<th>id_curso</th>
+    <th>alumno</th>
+<th>calificacion</th>
+    <th>unidad</th>
+    <th>asistencia</th>
+  </tr>
+
+<?php $__currentLoopData = $calificaciones; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calif): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <tr>
+
+<th><?php echo e($calif->semestre); ?></th>
+<th><?php echo e($calif->unidades); ?></th>
+
+<th><?php echo e($calif->descripcionCurso); ?></th>
+<th><?php echo e($calif->id_curso); ?></th>
+<th><?php echo e($calif->id_alumno); ?></th>
+<th><?php echo e($calif->calificacion); ?></th>
+<th><?php echo e($calif->unidad); ?></th>
+<th><?php echo e($calif->asistencia); ?></th>
+
+</tr>
+
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+  
+</table>
+
+<?php $__currentLoopData = $calificaciones; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calif): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+<?php echo e(print_r($calif)); ?>
+
+    <br>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

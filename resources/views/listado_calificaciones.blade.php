@@ -1,0 +1,148 @@
+@extends('backpack::layout')
+
+@section('header')
+	<section class="content-header">
+	  <h1>
+	    <span class="text">
+	    	
+          Alumnos en el grupo {{$grupo}}
+	    </span>
+	    <small><span></span></small>
+	  </h1>
+	  <ol class="breadcrumb">
+	    <li><a href="{{ url(config('backpack.base.route_prefix'), 'dashboard') }}"></a></li>
+	    <li><a href="" class="text-capitalize"></a></li>
+	    <li class="active"></li>
+	  </ol>
+	</section>
+@endsection
+
+@section('content')
+<script src="{{ asset('js/calificaciones.js') }}"></script>
+
+<!-- Default box -->
+  <div class="row">
+
+    <!-- THE ACTUAL CONTENT -->
+    <div class="col-md-12">
+      <div class="box">
+        <div class="box-header">
+          <div id="datatable_button_stack" class="pull-right text-right hidden-xs">
+    <a href="/public/evaluacionpdf/{{$idgrupo}}/{{$idcurso}}" class="btn btn-primary ladda-button" data-style="zoom-in"><span class="ladda-label"><i class="glyphicon glyphicon-print"></i> Imprimir</span></a>
+    </div>
+    <p><b>Curso:</b> {{$nombreCurso}} <br> <b>Número de unidades:</b> {{ $numeroUnidades }}.<br></p>
+        </div>
+
+        <div class="box-body overflow-hidden table-responsive">
+
+        <table id="crudTable" class="table table-striped table-hover display responsive nowrap" cellspacing="0">
+            <thead>
+              <tr>
+               <th colspan="3">Datos del alumno</th>
+               
+               @for($i = 0; $i < count($fechas); $i++)
+                <th colspan="2" scope="col" class="text-center" {{ $fechas[$i][3] == true ? 'bgcolor="#198200"' : '' }}
+                >Periodo Evaluación  {{$fechas[$i][2]}} {{ $fechas[$i][3] == true ? 'Activo' : 'Inactivo' }} <br> {{$fechas[$i][0]}} - {{$fechas[$i][1]}}</th>
+                  
+               @endfor
+              </tr>
+    
+              <tr>
+               <th scope="col">Nombre</th>
+               <th scope="col">Apellido <br>Paterno</th>
+               <th scope="col">Apellido <br>Materno</th>
+               @for($i = 0; $i < $numeroUnidades; $i++)
+                  <th scope="col">Calificación <br>Unidad {{$i+1}}</th>
+                  <th scope="col">Asistencia <br>Unidad {{$i+1}}</th>
+               @endfor
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+            <tfoot>
+              
+               @foreach ($alumnos as $alumno)
+                <tr>
+                  <td>{{ $alumno->nombre }}</td>
+                  <td>{{ $alumno->app }}</td>
+                  <td>{{ $alumno->apm }} <br><br> <b>ESTADO:</b></td>
+                  @foreach ($calificaciones as $calificacion)
+                    
+                    @if($calificacion[0][2] == $alumno->id_Alumno)
+              
+                        @foreach($calificacion as $celda)
+
+                            
+                            @if($celda[4] == "no")
+                               <td><input type="number" class="form-control" name="cal" id="{{$celda[0]}}-calif-{{$alumno->id_Alumno}}" min="1" max="10" {{ $celda[6] == "no" ? 'readonly' : '' }}>
+                                <pre id='{{$celda[0]}}-rescal-{{$alumno->id_Alumno}}' ><FONT SIZE=1>No Capturado</font></pre></td>
+                            @else
+                                <td><input type="number" value="{{$celda[4]}}"  class="form-control" name="cal" id="{{$celda[0]}}-calif-{{$alumno->id_Alumno}}" min="1" max="10" {{ $celda[6] == "no" ? 'readonly' : '' }}>
+                                @if($celda[4] < 7)
+                                  <pre style=" background-color: #FC271C; color: white;" 
+                                  id='{{$celda[0]}}-rescal-{{$alumno->id_Alumno}}'><FONT SIZE=1><span aria-hidden="true">Capturado<br>No Aprobado</span></font></pre>
+                                @else
+                                  <pre style=" background-color: #047C31; color: white;" 
+                                  id='{{$celda[0]}}-rescal-{{$alumno->id_Alumno}}'><FONT SIZE=1><span class="glyphicon glyphicon-ok" aria-hidden="true"> Capturado</span></font></pre>
+                                @endif
+                                </td>
+                            @endif
+
+
+                            @if($celda[5] == "no")
+                               <td><input type="number" class="form-control" name="cal" id="{{$celda[0]}}-asistencia-{{$alumno->id_Alumno}}" min="1" max="10" {{ $celda[6] == "no" ? 'readonly' : '' }}>
+                                <pre id='{{$celda[0]}}-resasis-{{$alumno->id_Alumno}}'><FONT SIZE=1>No Capturado</font></pre></td>
+                            @else
+                                <td><input type="number" value="{{$celda[5]}}"  class="form-control" name="cal" id="{{$celda[0]}}-asistencia-{{$alumno->id_Alumno}}" min="1" max="10" {{ $celda[6] == "no" ? 'readonly' : '' }}>
+                                
+                                @if($celda[5] < 7)
+                                  <pre style=" background-color: #FC271C; color: white;"
+                                  id='{{$celda[0]}}-resasis-{{$alumno->id_Alumno}}'><FONT SIZE=1><span  aria-hidden="true">Capturado<br>No Aprobado</span></font></pre>
+                                @else
+                                  <pre style=" background-color: #047C31; color: white;"
+                                  id='{{$celda[0]}}-resasis-{{$alumno->id_Alumno}}'><FONT SIZE=1><span class="glyphicon glyphicon-ok" aria-hidden="true"> Capturado</span></font></pre>
+                                @endif
+                                </td>
+                            @endif
+
+              
+                        @endforeach
+
+                    @endif
+                  
+                  @endforeach
+                </tr>
+               @endforeach
+              
+            </tfoot>
+
+          </table>
+
+
+
+
+        </div><!-- /.box-body -->
+
+      
+
+      </div><!-- /.box -->
+    </div>
+
+  </div>
+
+@endsection
+
+@section('after_styles')
+  <!-- DATA TABLES -->
+  <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css">
+
+  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/crud.css') }}">
+  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/form.css') }}">
+  <link rel="stylesheet" href="{{ asset('vendor/backpack/crud/css/list.css') }}">
+
+  <!-- CRUD LIST CONTENT - crud_list_styles stack -->
+  @stack('crud_list_styles')
+@endsection
+

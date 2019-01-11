@@ -1,0 +1,25 @@
+// -- /resoruces/views/vendor/backpack/crud/fields/select2_grouped.blade.php
+// -- Beginning and end of standard select2 option clipped...
+<select
+        name="<?php echo e($field['name']); ?>"
+        <?php echo $__env->make('crud::inc.field_attributes', ['default_class' =>  'form-control select2'], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+        >
+
+            <?php if($entity_model::isColumnNullable($field['name'])): ?>
+                <option value="">-</option>
+            <?php endif; ?>
+             
+            <?php if(isset($field['model']) && isset($field['group_entity'])): ?>
+                <?php $__currentLoopData = $field['model']::with($field['group_entity'])->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $connected_entity_entry): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <optgroup label="<?php echo e($connected_entity_entry->{$field['group_label_attribute']}); ?>">
+                        <?php $__currentLoopData = $connected_entity_entry->{$field['group_entity']}; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subconnected_entity_entry): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($subconnected_entity_entry->getKey()); ?>"
+                                <?php if( ( old($field['name']) && old($field['name']) == $subconnected_entity_entry->getKey() ) || (isset($field['value']) && $subconnected_entity_entry->getKey()==$field['value'])): ?>
+                                     selected
+                                <?php endif; ?>
+                            ><?php echo e($subconnected_entity_entry->{$field['attribute']}); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </optgroup>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
+    </select>

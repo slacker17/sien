@@ -1,0 +1,180 @@
+<?php $__env->startSection('header'); ?>
+	<section class="content-header">
+	  <h1>
+	    <span class="text">
+    <?php if(isset($licenciaturas)): ?>
+          Fechas de evaluación
+    <?php else: ?>
+    Asignacion para el semestre 
+    <?php endif; ?>
+	    </span>
+	    <small><span></span></small>
+	  </h1>
+	  
+	</section>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+    <script src="<?php echo e(asset('js/fechas_evaluacion.js')); ?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- Default box -->
+  <div class="row">
+
+    <!-- THE ACTUAL CONTENT -->
+    <div class="col-md-12">
+      <div class="box">
+        <div class="box-header">
+          <div id="datatable_button_stack" class="pull-right text-right hidden-xs">
+
+    </div>
+    Plan de estudios vigentes en el ciclo escolar actual:
+        </div>
+
+        <div class="box-body overflow-hidden table-responsive">
+    
+    <?php if(isset($licenciaturas)): ?>
+    
+    
+    <div class="form-group" id="cont_licenciatura">
+    <label for="">Licenciatura:</label>
+    <select class="form-control" id="licenciaturas">
+    <option selected disable>[ -- Seleccione -- ]</option>
+    <?php $__currentLoopData = $licenciaturas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $licenciatura): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <option value="<?php echo e($licenciatura->licenciatura); ?>"><?php echo e($licenciatura->licenciatura); ?></option>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </select>
+    <br>
+  </div>
+    
+  <div class="form-group" id="cont_plan">
+    <label for="exampleFormControlSelect1">Seleccione Plan de estudios</label>
+    <select class="form-control" id="planes">
+    <option selected disable>[ -- Seleccione -- ]</option>
+      
+    </select>
+    <br>
+  </div>
+    
+  <div class="form-group" id="cont_semestre">
+    <label for="exampleFormControlSelect2">Seleccione semestre (se muestran los que son cursados en el ciclo escolar actual):</label>
+    <select class="form-control" id="semestres">
+      <option selected disable>[ -- Seleccione -- ]</option>
+    </select>
+  </div>
+
+    
+    <div class="container" id="btn_enviar">
+    <button type="button" id="enviar" class="btn btn-primary">Continuar</button>
+    </div>
+
+    <?php elseif(isset($simplificado)): ?>
+    <!--
+    <?php $__currentLoopData = $cursos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $curso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+    <td class="bg-success" colspan="<?php echo e($curso[1]); ?>"><?php echo e($curso[0]); ?></td>
+    </tr>
+  </thead>
+
+     <tbody>
+    <tr>
+<?php for($i=1;$i<=$curso[1];$i++): ?>
+    <th>Unidad <?php echo e($i); ?></th>
+    <?php endfor; ?>
+    </tr>
+
+    <tr>
+<?php for($i=1;$i<=$curso[1]; $i++): ?>
+    <th>
+Fecha Inicio: <input type="date" id="<?php echo e($curso[2][$i-1][0]); ?>"><br>
+    Fecha Fin: <input type="date" id="<?php echo e($curso[2][$i-1][1]); ?>">
+    </th>
+    <?php endfor; ?>
+    </tr>
+
+<tr>
+      
+    </tr>
+  </tbody>
+    </table>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+-->
+
+   
+
+
+    <?php $__currentLoopData = $simplificado; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+ <div class="form-group">    
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+    <td class="bg-success" colspan="<?php echo e(count($row)); ?>">Asignacion de cursos con <?php echo e(count($row)); ?> unidades</td> 
+    </tr>
+    </thead>
+
+
+    <tbody>
+    <tr>
+<?php for($i=1;$i<=(count($row));$i++): ?>
+    <th >Unidad <?php echo e($i); ?></th>
+    <?php endfor; ?>
+    </tr>
+
+    <tr>
+<?php for($i=1;$i<=count($row); $i++): ?>
+    <th>
+Fecha Inicio: <br>
+ 
+<input type="date" class="form-control" id="<?php echo e($row[$i-1]); ?>-fi">
+ 
+                                                                                                  <br>
+    Fecha Fin: <br><input type="date" class="form-control" id="<?php echo e($row[$i-1]); ?>-ff"><br>
+    </th>
+    <?php endfor; ?>
+    </tr>
+
+<tr>
+      
+    </tr>
+  </tbody>
+</table>
+                                                                                                  </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+<?php endif; ?>
+    
+
+
+        </div><!-- /.box-body -->
+
+      
+
+      </div><!-- /.box -->
+    </div>
+
+  </div>
+<script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+        </script>
+    
+    <?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('after_styles'); ?>
+  <!-- DATA TABLES -->
+  <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css">
+
+  <link rel="stylesheet" href="<?php echo e(asset('vendor/backpack/crud/css/crud.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('vendor/backpack/crud/css/form.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('vendor/backpack/crud/css/list.css')); ?>">
+
+  <!-- CRUD LIST CONTENT - crud_list_styles stack -->
+  <?php echo $__env->yieldPushContent('crud_list_styles'); ?>
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('backpack::layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

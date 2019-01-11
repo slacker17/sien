@@ -1,0 +1,393 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Backpack\PermissionManager\app\Http\Controllers;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Auth;
+use Illuminate\Http\Request;
+use Backpack\CRUD\app\Http\Requests\CrudRequest;
+use Backpack\PermissionManager\app\Http\Controllers\UserCrudController;
+
+// VALIDATION: change the requests to match your own file names if you need form validation
+use App\Http\Requests\ProfesorRequest as StoreRequest;
+use App\Http\Requests\ProfesorRequest as UpdateRequest;
+
+class ProfesorCrudController extends CrudController
+{
+    //public $flight = App\Models\Role::where('name', 'DOCENTE')->first();
+    //public $idRolDocente = $flight->id; // Id del docente (rol) para guardarlo en roles_users
+    public $idRolDocente = 3;        // Id rol docente
+    public $idRolAdministrativo = 2; // Id rol administrativo
+
+    public function setup()
+    {
+        
+        /*
+        |--------------------------------------------------------------------------
+        | BASIC CRUD INFORMATION
+        |--------------------------------------------------------------------------
+        */
+        $this->crud->setModel('App\Models\Profesor');
+        $this->crud->setEntityNameStrings(trans('backpack::permissionmanager.user'), trans('backpack::permissionmanager.users'));
+        $this->crud->enableAjaxTable();
+
+        // Si tiene el rol de subdirector academico cambiamos de docente a administrativo
+        if(Auth::user()->hasRole('SUBDIRECTOR ACADÉMICO')){
+        	$this->crud->setRoute(config('backpack.base.route_prefix') . '/administrativo');
+        	$this->crud->setEntityNameStrings('administrativo', 'Administrativos');
+        }// Si no, si solo es administrativo normal, se muestra para dar de alta docentes
+        else if( Auth::user()->hasRole('ADMINISTRATIVO') or Auth::user()->hasRole('DIRECTOR')){ 
+            $this->crud->setRoute(config('backpack.base.route_prefix') . '/profesor');
+        	$this->crud->setEntityNameStrings('docente', 'Docentes');
+        }
+        /*
+        |--------------------------------------------------------------------------
+        | BASIC CRUD INFORMATION
+        |--------------------------------------------------------------------------
+        */
+
+        //if(!Auth::user()->hasRole('DIRECTOR')){
+            // Acciones para director
+        $this->crud->setListView('listado_docentes');// Vista personalizada para mostrar docentes
+            //}
+        //$this->crud->enableExportButtons();
+        //$this->crud->setFromDb(); // Esta linea coloca en el formulario el orden automatico de los fields (desactivar para poner el orden de abajo )
+        
+        // Columns.
+        $this->crud->setColumns([
+            [
+                'name'  => 'name',
+                'label' => trans('backpack::permissionmanager.name'),
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'app',
+                'label' => 'A. Paterno',
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'apm',
+                'label' => 'A. Materno',
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'curp',
+                'label' => 'CURP',
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'username',
+                'label' => 'Usuario',
+                'type'  => 'text',
+	    ],
+	    [
+	    	'name'  => 'status',
+		'label' => 'Status',
+		'type'  => 'boolean',
+		'options' => [0 => 'Inactivo', 1 => 'Activo'],
+	    ],
+
+            /*[
+                'name'  => 'email',
+                'label' => trans('backpack::permissionmanager.email'),
+                'type'  => 'email',
+            ],*/
+        ]);
+
+        // Fields
+        $this->crud->addFields([
+            //
+            [
+                'name'  => 'name',
+                'label' => trans('backpack::permissionmanager.name'),
+                'type'  => 'text',
+                'attributes' => [
+                    'onBlur'  => 'mayusculas(this)',
+                    'id'      => 'name',
+                ],
+            ],
+            
+            // Columnas personalizadas
+            [
+                'name'  => 'app',
+                'label' => 'Apellido Paterno',
+                'type'  => 'text',
+                'attributes' => [
+                    'onBlur'  => 'mayusculas(this)',
+                    'id'      => 'app',
+                ],
+            ],
+            [
+                'name'  => 'apm',
+                'label' => 'Apellido Materno',
+                'type'  => 'text',
+                'attributes' => [
+                    'onBlur'  => 'mayusculas(this)',
+                    'id'      => 'apm',
+                ],
+            ],
+            
+            [
+                'name'  => 'username',
+                'type'  => 'text',
+                'label' => 'Nombre de usuario (para acceder al sistema)',
+                'attributes' => [
+                    'id' => 'username',
+                ],
+            ],
+            // Columnas de backpack
+            
+            [
+                'name'  => 'email',
+                'label' => trans('backpack::permissionmanager.email'),
+                'type'  => 'email',
+		'attributes' => [
+		    
+		],
+            ],
+            [
+                'name'  => 'password',
+                'label' => trans('backpack::permissionmanager.password'),
+                'type'  => 'password',
+            ],
+            [
+                'name'  => 'password_confirmation',
+                'label' => trans('backpack::permissionmanager.password_confirmation'),
+                'type'  => 'password',
+            ],
+            
+            // Columnas personalizadas           
+            [
+                'name'  => 'curp',
+                'label' => 'CURP',
+                'type'  => 'text',
+                'attributes' => [
+                    'onBlur'  => 'mayusculas(this)',
+                    'id'      => 'curp',
+                    'oninput' => "validarInput(this)",
+                ],
+            ],
+            [
+                'name'  => 'domicilio',
+                'label' => 'Domicilio',
+                'type'  => 'text',
+                'attributes' => [
+                    'onBlur'  => 'mayusculas(this)',
+                ],
+            ],
+            [
+                'name'  => 'telefono',
+                'label' => 'Teléfono',
+                'type'  => 'number',
+            ],
+            
+            [   // Hidden
+                'name' => 'idescuelanormal',
+                'type' => 'hidden',
+                'value' => Auth::user()->idescuelanormal,
+            ],
+            
+            [
+                'name'  => 'status',
+                'label' => 'Estado',
+                'type'  => 'select2_from_array',
+                'options' => ['0' => 'Inactivo', '1' => 'Activo'],
+                'allows_null' => false,
+                'default' => '1',
+            ],
+        ]);
+        
+        if(Auth::user()->hasRole('ADMINISTRATIVO')){
+            $this->crud->addField([   // Role user (docente) = n-n relationship (with pivot table)
+                'type' => 'hidden',
+                'name' => 'roles', // the method that defines the relationship in your Model
+                'entity' => 'roles', // the method that defines the relationship in your Model
+                //'attribute' => 'name', // foreign key attribute that is shown to user
+                'model' => "App\Models\Role", // foreign key model
+                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                'value' => $this->idRolDocente,
+            ]);
+        }else if(Auth::user()->hasRole('SUBDIRECTOR ACADÉMICO')){
+            $this->crud->addField([   // Role user (docente) = n-n relationship (with pivot table)
+                'type' => 'hidden',
+                'name' => 'roles', // the method that defines the relationship in your Model
+                'entity' => 'roles', // the method that defines the relationship in your Model
+                //'attribute' => 'name', // foreign key attribute that is shown to user
+                'model' => "App\Models\Role", // foreign key model
+                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                'value' => $this->idRolAdministrativo,
+            ]);
+            
+        }
+        
+        
+            // Curso que imparte (opcional o solo para subdirector academico)
+        // ]);
+        /*
+        if(Auth::user()->hasRole('SUBDIRECTOR ACADÉMICO')){
+            $this->crud->addField([
+                'label' => "Curso que impartira (puede dejar el campo en blanco y agregarlo despues)",
+                'type' => 'select2',
+                'name' => 'id_curso', // the db column for the foreign key
+                'entity' => 'cursos', // the method that defines the relationship in your Model
+                'attribute' => 'descripcionCurso', // foreign key attribute that is shown to user
+                'model' => "App\Models\Curso" // foreign key model
+            ]);
+        }    
+        */
+        // ------ CRUD FIELDS
+        // $this->crud->addField($options, 'update/create/both');
+        // $this->crud->addFields($array_of_arrays, 'update/create/both');
+        // $this->crud->removeField('name', 'update/create/both');
+        // $this->crud->removeFields($array_of_names, 'update/create/both');
+
+        // ------ CRUD COLUMNS
+        // $this->crud->addColumn(); // add a single column, at the end of the stack
+        // $this->crud->addColumns(); // add multiple columns, at the end of the stack
+        // $this->crud->removeColumn('column_name'); // remove a column from the stack
+        // $this->crud->removeColumns(['column_name_1', 'column_name_2']); // remove an array of columns from the stack
+        // $this->crud->setColumnDetails('column_name', ['attribute' => 'value']); // adjusts the properties of the passed in column (by name)
+        // $this->crud->setColumnsDetails(['column_1', 'column_2'], ['attribute' => 'value']);
+
+        // ------ CRUD BUTTONS
+        // possible positions: 'beginning' and 'end'; defaults to 'beginning' for the 'line' stack, 'end' for the others;
+        // $this->crud->addButton($stack, $name, $type, $content, $position); // add a button; possible types are: view, model_function
+        // $this->crud->addButtonFromModelFunction($stack, $name, $model_function_name, $position); // add a button whose HTML is returned by a method in the CRUD model
+        // $this->crud->addButtonFromView($stack, $name, $view, $position); // add a button whose HTML is in a view placed at resources\views\vendor\backpack\crud\buttons
+        // $this->crud->removeButton($name);
+        // $this->crud->removeButtonFromStack($name, $stack);
+        // $this->crud->removeAllButtons();
+        // $this->crud->removeAllButtonsFromStack('line');
+
+        // ------ CRUD ACCESS
+        // $this->crud->allowAccess(['list', 'create', 'update', 'reorder', 'delete']);
+        // $this->crud->denyAccess(['list', 'create', 'update', 'reorder', 'delete']);
+
+        // ------ CRUD REORDER
+        // $this->crud->enableReorder('label_name', MAX_TREE_LEVEL);
+        // NOTE: you also need to do allow access to the right users: $this->crud->allowAccess('reorder');
+
+        // ------ CRUD DETAILS ROW
+        // $this->crud->enableDetailsRow();
+        // NOTE: you also need to do allow access to the right users: $this->crud->allowAccess('details_row');
+        // NOTE: you also need to do overwrite the showDetailsRow($id) method in your EntityCrudController to show whatever you'd like in the details row OR overwrite the views/backpack/crud/details_row.blade.php
+
+        // ------ REVISIONS
+        // You also need to use \Venturecraft\Revisionable\RevisionableTrait;
+        // Please check out: https://laravel-backpack.readme.io/docs/crud#revisions
+        // $this->crud->allowAccess('revisions');
+
+        // ------ AJAX TABLE VIEW
+        // Please note the drawbacks of this though:
+        // - 1-n and n-n columns are not searchable
+        // - date and datetime columns won't be sortable anymore
+        // $this->crud->enableAjaxTable();
+
+        // ------ DATATABLE EXPORT BUTTONS
+        // Show export to PDF, CSV, XLS and Print buttons on the table view.
+        // Does not work well with AJAX datatables.
+        // $this->crud->enableExportButtons();
+
+        // ------ ADVANCED QUERIES
+        // $this->crud->addClause('active');
+        // $this->crud->addClause('type', 'car');
+        // $this->crud->addClause('where', 'name', '==', 'car');
+        // $this->crud->addClause('whereName', 'car');
+        // $this->crud->addClause('whereHas', 'posts', function($query) {
+        //     $query->activePosts();
+        // });
+        // $this->crud->addClause('withoutGlobalScopes');
+        // $this->crud->addClause('withoutGlobalScope', VisibleScope::class);
+        // $this->crud->with(); // eager load relationships
+        // $this->crud->orderBy();
+        // $this->crud->groupBy();
+        // $this->crud->limit();
+
+        // Mostrar usuarios de la normal del usuario logueado
+        $this->crud->addClause('where', 'idescuelanormal', '=', (string)Auth::user()->idescuelanormal);
+        
+        
+        if(Auth::user()->hasRole('ADMINISTRATIVO')){
+            $this->crud->addClause('whereHas', 'roles', function($query){
+                $query->where('name', 'DOCENTE');
+            });
+            
+            // Restringimos la eliminacion del docente (mostrar el boton)
+            $this->crud->removeButton('delete');
+            
+        }else if(Auth::user()->hasRole('SUBDIRECTOR ACADÉMICO')){
+            $this->crud->addClause('whereHas', 'roles', function($query){
+                $query->where('name', 'ADMINISTRATIVO');
+        	});
+            //$this->crud->addButtonFromModelFunction('line', 'asignar_grupos', 'asignarGruposAdministrativo', 'beginning'); 
+        }
+		
+        // Mostrar usuarios solo con el rol 'DOCENTE'
+        //$this->crud->addClause('whereHas', 'roles', function($query){
+        //    $query->where('name', $nombre_rol);
+        //}); 
+        //
+    }
+    
+    /**
+     * Store a newly created resource in the database.
+     *
+     * @param StoreRequest $request - type injection used for validation using Requests
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(StoreRequest $request)
+    {
+        $this->handlePasswordInput($request);
+       
+        //$resultado = parent::storeCrud($request);
+
+        // Insertamos rol
+        //DB::insert('insert into role_users (role_id, user_id) values (?, ?)', [$this->idRolDocente, $resultado]);
+        return parent::storeCrud($request);
+        //return $resultado;
+    }
+
+    /**
+     * Update the specified resource in the database.
+     *
+     * @param UpdateRequest $request - type injection used for validation using Requests
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(UpdateRequest $request)
+    {
+        //$this->handlePasswordInput($request);
+	
+        // Remove fields not present on the user.
+        $request->request->remove('password_confirmation');
+        // Encrypt password if specified.
+        if ($request->input('password')) {
+            $request->request->set('password', bcrypt($request->input('password')));
+        } else {
+            $request->request->remove('password');
+        }
+
+        return parent::updateCrud($request);
+    }
+
+    /**
+     * Handle password input fields.
+     *
+     * @param CrudRequest $request
+     */
+    protected function handlePasswordInput(CrudRequest $request)
+    {
+        // Remove fields not present on the user.
+        $request->request->remove('password_confirmation');
+
+        // Encrypt password if specified.
+        if ($request->input('password')) {
+            $request->request->set('password', bcrypt($request->input('password')));
+        } else {
+            $request->request->remove('password');
+        }
+    }
+
+}

@@ -1,0 +1,34 @@
+<!--<div class="alert alert-success" role="alert">
+  This is a success alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+</div>-->
+
+
+<div class="card text-center">
+  <div class="card-header">
+         <strong>
+Detalles
+         </strong>
+  </div>
+  <div class="card-body">
+         
+         <h5 class="card-title">Nombre: <strong><?php echo e($entry->name); ?> <?php echo e($entry->app); ?> <?php echo e($entry->apm); ?></strong></h5>
+Cursos Asignados:
+    <?php if(count($entry->cursos) > 0): ?>
+        <br>
+        <?php $__currentLoopData = $entry->cursos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $curso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <strong><?php echo e($curso->descripcionCurso); ?></strong><br> 
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    <?php else: ?>
+        <strong>Ninguno</strong>
+    <?php endif; ?>
+    <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+  </div>
+  <div class="card-footer">
+Status:
+                                                                                     <?php if($entry->status == 1): ?>
+                                                                                         <strong>Activo</strong>
+                                                                                     <?php elseif($entry->status == 0): ?>
+                                                                                         <strong>Inactivo</strong>
+                                                                                         <?php endif; ?>
+  </div><br><br>
+</div>

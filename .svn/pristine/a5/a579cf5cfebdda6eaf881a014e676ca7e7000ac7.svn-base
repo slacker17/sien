@@ -1,0 +1,140 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    CRUD::resource('curso', 'CursoCrudController');
+    CRUD::resource('grupo', 'GrupoCrudController');
+    CRUD::resource('alumno', 'AlumnoCrudController');
+    CRUD::resource('profesor', 'ProfesorCrudController');
+    CRUD::resource('administrativo', 'ProfesorCrudController');
+    CRUD::resource('escuelanormal', 'EscuelanormalCrudController');
+    CRUD::resource('asignadocentecurso', 'AsignaDocenteCursoCrudController');
+    CRUD::resource('grupocursouser', 'Grupo_curso_userCrudController');
+    CRUD::resource('asignagrupoadministrativo', 'AsignaGrupoAdministrativoCrudController');
+    CRUD::resource('cicloescolar', 'CicloescolarCrudController');
+    CRUD::resource('planestudio', 'PlanestudioCrudController');
+    
+    // Checar 
+    CRUD::resource('asignaalumnogrupo', 'AsignaAlumnoGrupoCrudController');
+    CRUD::resource('listgrupoprofesor', 'ListGrupoProfesorCrudController');
+
+});
+
+//Dashboard
+Route::get('admin/dashboard', 'DashboardController@index');
+
+// Obtenbemos alumno x curp para darlo de alta en un grupo
+Route::post('admin/getdataalumno', 'Admin\GrupoCrudController@getAlumnoByCurp');
+// Actualizacion id grupo del alumno
+Route::post('admin/updatealumnogrupo', 'Admin\GrupoCrudController@actualizarAlumnoGrupo');
+
+// Listado calificaciones
+Route::get('/admin/altacalificacion/{idgrupo}', 'AltaCalificacionController@listado');
+//Route::post('/admin/insertacalificacion', 'AltaCalificacionController@saveCalificacion')->name('insertacalificacion');
+Route::post('/admin/altacalificacion/insertacalificacion', 'AltaCalificacionController@saveCalificacion');
+
+// Carga horaria para grupo y docente
+Route::get('/admin/cargahoraria/{id}/{esdocente?}/{espdf?}', 'CargaHorariaController@generarHorario');
+
+// Ajax
+Route::get('/profesornormal', 'ProfesorNormalController@index');
+Route::get('/profesornormal/{id}', 'ProfesorNormalController@show');
+
+// Get Administrativos
+Route::get('/getadministrativos', 'ProfesorNormalController@getAdministrativos');
+//Busqueda de cursos impartidos por el docente
+Route::get('/getcursosdocente', 'ProfesorNormalController@getCursos');
+
+// mandar a traer los docente que imprten un curso (usado en carga horaria)
+Route::post('/admin/cargahoraria/getdocentes', 'CargaHorariaController@getDocentes');
+// guardar carga horaria
+Route::post('/admin/cargahoraria/savecargahoraria', 'CargaHorariaController@saveCargaHoraria');
+// eliminar carga horaria
+Route::post('/admin/cargahoraria/deletecargahoraria', 'CargaHorariaController@eliminarCargaHoraria');
+// Obtener estado, municipio, localidades con codigo postal
+Route::post('/admin/alumno/getdomicilio', 'ProfesorNormalController@getDomicilio');
+
+// Cambiar el status de un alumno
+Route::post('/admin/updatestatusalumno', 'Admin\AlumnoCrudController@updateStatusAlumno');
+// Actualizar todos los alumnos pertenceientes a un grupo a otro grupo (idgrupo)
+Route::post('/admin/updategrupoalumno', 'Admin\AlumnoCrudController@updateWholeGroup');
+// Actualizar un alumno especifico a un grupo
+Route::post('/admin/updategrupoalumnoindividual', 'Admin\AlumnoCrudController@updateGroup');
+
+// Obtenemos los grupos que tine asignado el administrativo (user) logueado
+Route::get('/getgruposadministrativo', 'ProfesorNormalController@getGruposAdministrativo');
+// Obtenemos las CURP sin grupo
+Route::get('/getcurpssingrupo', 'ProfesorNormalController@getAlumnosSinGrupo');
+
+// Obtenemos los cursos pertenecientes a la normal logueada a traves del usuarios (usado por el controlador asigna docente curso)
+Route::get('getcursosnormal', 'ProfesorNormalController@getCursosByNormal');
+
+// Formatos pdf
+Route::get('inscripcionpdf/{id?}', 'FormatosController@inscripcion');
+Route::get('evaluacionpdf/', 'FormatosController@asistenciaYevaluacion');
+Route::get('evaluacionpdf/{idgrupo?}/{idcurso?}', 'FormatosController@asistenciaYevaluacion');
+Route::get('kardexpdf/{id?}', 'FormatosController@kardexAlumno');
+Route::get('certificadopdf/{id?}', 'FormatosController@certificado');
+
+Route::get('kardex', 'FormatosController@califs');
+Route::get('kardexTest/{id?}', 'FormatosController@testKardex');
+
+/**** Details row ****/
+// Asiganr docente a curso
+Route::get('asignadocentecurso/{id}/details', 'AsignaDocenteCursoCrudController@showDetailsRow');
+// Detalles de alumnos en su grupo, usado para el rol administrativo
+Route::get('alumno/{id}/details', 'AlumnoCrudController@showDetailsRow');
+
+// Otros pdf con libreria
+// Horario por grupo
+Route::get('carga-horaria/{grupo?}', 'FormatosController@cargaHoraria')->name('ch.pdf');
+
+//test qr
+Route::get('qr-code/{id?}', 'FormatosController@generarQR');
+
+// Comprobacion de certificacion
+Route::get('certificacion/{id?}', 'FormatosController@comprobacionCertificado');
+
+// Asignacion de fechas-evaluacion-unidades (periodos de evaluacion por cada unidad) 
+Route::get('/admin/fechasevaluacion', 'Admin\Fechas_evaluacion_unidadesCrudController@showFechas');
+
+// Obtenemos planes y semestre par fechas de evaluacion
+Route::post('/admin/getplansemestre', 'DashboardController@getPlanSemestreFechas');
+
+Route::get('/admin/asignafechas/{licenciatura?}/{plan?}/{semestre?}', 'Admin\Fechas_evaluacion_unidadesCrudController@asignarFechas');
+
+/*
+  
+  select 
+  users.name, 
+  roles.id,
+  roles.name,
+  escuelasnormales.nombre 
+  from users 
+  inner join role_users 
+  inner join roles 
+  inner join escuelasnormales
+  where users.id=role_users.user_id 
+  and roles.id=role_users.role_id
+  and users.idescuelanormal=escuelasnormales.id
+  order by escuelasnormales.nombre, roles.name
+  
+*/

@@ -1,0 +1,81 @@
+<?php $__env->startSection('header'); ?>
+    <section class="content-header">
+      <h1>
+        Bienvenido<small>Página de Inicio</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="<?php echo e(backpack_url()); ?>"><?php echo e(config('backpack.base.project_name')); ?></a></li>
+        <li class="active"><?php echo e(trans('backpack::base.dashboard')); ?></li>
+      </ol>
+    </section>
+<?php $__env->stopSection(); ?>
+
+
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Panel de Control </div>
+                </div>
+
+                <div class="box-body">
+
+
+
+    <div class="row">
+    <?php $__currentLoopData = $semestres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $semestre): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+  <div class="col-sm-12 col-md-6">
+    <div class="thumbnail">
+      
+      <div class="caption">
+    <h3>Semestre <?php echo e($semestre->semestre); ?></h3>
+        <p>Cursos</p>
+<?php $__currentLoopData = $cursos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $curso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <?php if($curso[2] == $semestre->semestre): ?>
+        <!-- Tabla con fechas de cada curso -->
+            <table class="table table-bordered">
+  <thead>
+    <tr>
+
+    <th class="bg-success text-center" colspan="<?php echo e($curso[1]); ?>"><?php echo e($curso[0]); ?> | Unidades: <?php echo e($curso[1]); ?></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+<?php for($i=1; $i<=(int)$curso[1]; $i++): ?>
+<td><b>Periodo Evaluación <?php echo e($i); ?></b></td>
+    <?php endfor; ?>
+                                                  </tr>
+<tr>
+<?php for($i=0; $i < count($curso[3]); $i++): ?>
+    <td> <b>Fecha Inicio:</b> <?php echo e($curso[3][$i][0]); ?>  <br>  <b>Fecha Fin:</b> <?php echo e($curso[3][$i][1]); ?>  </td>
+    
+    <?php endfor; ?>
+</tr>
+  </tbody>
+</table>
+        
+
+
+        <?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    
+        <!--<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>-->
+      </div>
+    </div>
+  </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+
+    
+    
+    </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backpack::layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

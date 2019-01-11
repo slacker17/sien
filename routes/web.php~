@@ -1,0 +1,216 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Endpoints
+$cruds = array("curso", "grupo", "matricula", "alumno", "profesor", "escuelanormal");
+/*
+foreach($cruds as $ruta){
+	$controllerr = ucfirst($ruta)."CrudController";
+	Route::group([
+    	'prefix' => config('backpack.base.route_prefix', 'admin'),
+    	'middleware' => ['admin'],
+    	'namespace' => 'Admin'
+	], function() {
+		global $controllerr, $ruta;
+    	// your CRUD resources and other admin routes here
+    	CRUD::resource($ruta, $controllerr);
+	});
+}*/
+
+
+// Cursos
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('curso', 'CursoCrudController');
+});
+
+// Grupos
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('grupo', 'GrupoCrudController');
+    
+
+});
+
+// Obtenbemos alumno x curp para darlo de alta en un grupo
+Route::post('admin/getdataalumno', 'Admin\GrupoCrudController@getAlumnoByCurp');
+// Actualizacion id grupo del alumno
+Route::post('admin/updatealumnogrupo', 'Admin\GrupoCrudController@actualizarAlumnoGrupo');
+
+// Matriculas
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('matricula', 'MatriculaCrudController');
+});
+
+// Alumno
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('alumno', 'AlumnoCrudController');
+    //Route::post('/admin/alumno/getdomicilio', 'AlumnoCrudController@getDomicilio');
+    // get alumnos by id grupo
+    //CRUD::resource('alumno/grupo/{idgrupo?}', 'AlumnoCrudController');
+});
+
+// Profesor
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin',
+], function() {
+    // your CRUD resources and other admin routes here
+	CRUD::resource('profesor', 'ProfesorCrudController');
+    CRUD::resource('administrativo', 'ProfesorCrudController');
+});
+
+// Escuelas normales
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('escuelanormal', 'EscuelanormalCrudController');
+});
+
+// AsignaDocenteCurso
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('asignadocentecurso', 'AsignaDocenteCursoCrudController');
+});
+
+// AsignaAlumnoGrupo
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('asignaalumnogrupo', 'AsignaAlumnoGrupoCrudController');
+});
+
+
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('listgrupoprofesor', 'ListGrupoProfesorCrudController');
+});
+
+
+// Relacion grupos cursos users
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('grupocursouser', 'Grupo_curso_userCrudController');
+}); 
+
+
+// Vista para subir calificaciones
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('asignagrupoadministrativo', 'AsignaGrupoAdministrativoCrudController');
+});
+
+// Vista para ciclo escolar
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['admin'],
+    'namespace' => 'Admin'
+], function() {
+    // your CRUD resources and other admin routes here
+    CRUD::resource('cicloescolar', 'CicloescolarCrudController');
+});
+
+
+#$sufix = '/usuarios/public';
+
+// Listado calificaciones
+Route::get('/admin/altacalificacion/{idgrupo}', 'AltaCalificacionController@listado');
+//Route::post('/admin/insertacalificacion', 'AltaCalificacionController@saveCalificacion')->name('insertacalificacion');
+Route::post('/admin/altacalificacion/insertacalificacion', 'AltaCalificacionController@saveCalificacion');
+
+// Carga horaria 
+Route::get('/admin/cargahoraria/{idgrupo}', 'CargaHorariaController@generarHorario');
+
+
+//Route::post('/admin/altacalificacion/insertaasistencia', 'AltaCalificacionController@saveAsistencia');
+//Route::post('/admin/insertacalificacion', array('as' => 'insertacalificacion', 'uses' => 'AltaCalificacionController@saveCalificacion'));
+
+// Ajax
+Route::get('/profesornormal', 'ProfesorNormalController@index');
+Route::get('/profesornormal/{id}', 'ProfesorNormalController@show');
+
+// Get Administrativos
+Route::get('/getadministrativos', 'ProfesorNormalController@getAdministrativos');
+//Busqueda de cursos impartidos por el docente
+Route::get('/getcursosdocente', 'ProfesorNormalController@getCursos');
+
+// mandar a traer los docente que imprten un curso (usado en carga horaria)
+Route::post('/admin/cargahoraria/getdocentes', 'CargaHorariaController@getDocentes');
+// guardar carga horaria
+Route::post('/admin/cargahoraria/savecargahoraria', 'CargaHorariaController@saveCargaHoraria');
+// eliminar carga horaria
+Route::post('/admin/cargahoraria/deletecargahoraria', 'CargaHorariaController@eliminarCargaHoraria');
+// Obtener estado, municipio, localidades con codigo postal
+Route::post('/admin/alumno/getdomicilio', 'ProfesorNormalController@getDomicilio');
+// Obtenemos los grupos que tine asignado el administrativo (user) logueado
+Route::get('/getgruposadministrativo', 'ProfesorNormalController@getGruposAdministrativo');
+// Obtenemos las CURP sin grupo
+Route::get('/getcurpssingrupo', 'ProfesorNormalController@getAlumnosSinGrupo');
+
+
+// Formatos pdf
+Route::get('inscripcionpdf/{id?}', 'FormatosController@inscripcion');
+Route::get('evaluacionpdf/', 'FormatosController@asistenciaYevaluacion');
+Route::get('evaluacionpdf/{idgrupo?}/{idcurso?}', 'FormatosController@asistenciaYevaluacion');
+
+
+// Details row
+Route::get('asignadocentecurso/{id}/details', 'AsignaDocenteCursoCrudController@showDetailsRow');
+
+// Otros pdf con libreria
+Route::get('carga-horaria/{grupo?}', 'FormatosController@cargaHoraria')->name('ch.pdf');

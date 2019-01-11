@@ -1,0 +1,81 @@
+@extends('backpack::layout')
+
+@section('header')
+    <section class="content-header">
+      <h1>
+        Bienvenido<small>Página de Inicio</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ backpack_url() }}">{{ config('backpack.base.project_name') }}</a></li>
+        <li class="active">{{ trans('backpack::base.dashboard') }}</li>
+      </ol>
+    </section>
+@endsection
+
+
+@section('content')
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Panel de Control </div>
+                </div>
+
+                <div class="box-body">
+
+
+
+    <div class="row">
+    @foreach($semestres as $semestre)
+  <div class="col-sm-12 col-md-6">
+    <div class="thumbnail">
+      
+      <div class="caption">
+    <h3>Semestre {{$semestre->semestre}}</h3>
+        <p>Cursos</p>
+@foreach($cursos as $curso)
+    @if($curso[2] == $semestre->semestre)
+        <!-- Tabla con fechas de cada curso -->
+            <table class="table table-bordered">
+  <thead>
+    <tr>
+
+    <th class="bg-success text-center" colspan="{{$curso[1]}}">{{$curso[0]}} | Unidades: {{$curso[1]}}</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+@for($i=1; $i<=(int)$curso[1]; $i++)
+<td><b>Periodo Evaluación {{$i}}</b></td>
+    @endfor
+                                                  </tr>
+<tr>
+@for($i=0; $i < count($curso[3]); $i++)
+    <td> <b>Fecha Inicio:</b> {{$curso[3][$i][0]}}  <br>  <b>Fecha Fin:</b> {{$curso[3][$i][1]}}  </td>
+    
+    @endfor
+</tr>
+  </tbody>
+</table>
+        
+
+
+        @endif
+@endforeach
+    
+        <!--<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>-->
+      </div>
+    </div>
+  </div>
+    @endforeach
+
+
+
+    
+    
+    </div>
+            </div>
+        </div>
+    </div>
+@endsection

@@ -1,0 +1,208 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\CrudTrait;
+use Spatie\Permission\Traits\HasRoles;// <---------------------- and this one
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Backpack\CRUD\Tests\Unit\Models\Role;
+use Auth;
+//use Backpack\CRUD\Tests\Unit\Models\Role;
+
+class Profesor extends Authenticatable
+{
+    use Notifiable;
+    use CrudTrait; // <----- this
+    use HasRoles; // <------ and this
+    //use HasRoles; // <------ and this
+    //
+    //
+    public $sufix = '/public';
+
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL VARIABLES
+    |--------------------------------------------------------------------------
+    */
+
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    //protected $primaryKey = 'id_profesores';
+    // public $timestamps = false;
+    //protected $guarded = ['id'];
+    protected $fillable = [
+        'name', 'app', 'apm', 'username', 'email', 'password', 'curp', 'domicilio', 'telefono', 'idescuelanormal', 'status' 
+    ];
+
+    protected $maps = [
+        'fullname' => 'name' . " " . 'app' . " " . 'apm',
+    ];
+    //protected $fillable = ['nombre', 'app', 'apm', 'curp', 'domicilio', 'telefono', 'correo'];
+    // protected $hidden = [];
+    // protected $dates = [];
+
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
+    /**
+    * Send the password reset notification.
+    *
+    * @param  string  $token
+    * @return void
+    */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    // Alias para mostrar el name, app, apm de usuarios como docentes
+    // Esto para el select de alta de grupos en seleccion del docente
+
+    public function getFullName(){
+        return $this->name . " " . $this->app . " " .$this->apm;
+    }
+
+    // Link para asignar grupos al administrativo
+    // Usado por el rol administrativo
+    public function asignarGruposAdministrativo($crud = false)
+    {
+        return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/administrativo/'.$this->id.'/edit" data-toggle="tooltip">
+                <i class="glyphicon glyphicon-plus"></i> Asignar Cursos</a>';
+    }
+
+    // Para mostrar la opcion de eliminar un docente u administrativo (dependiendo)
+    public function mostrarDeleteButton(){
+        
+    }
+    
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     *  Pertenece a una escuela normal 
+     */
+    public function escuelasnormales()
+    {
+      return $this->belongsTo('App\Models\Escuelanormal', 'idescuelanormal', 'id');
+    }
+
+    /**
+     *  Pertenece a un curso
+     */
+    public function cursos()
+    {
+      return $this->belongsTo('App\Models\Curso', 'id_curso', 'id_curso');
+    }
+
+
+    /**
+     *  Puede tener muchos cursos asignados
+     */
+    public function cursoss(){
+        return $this->belongsToMany('App\Models\Curso', 'curso_users', 'user_id', 'curso_id');
+    }
+
+    /**
+     * Get the user roles.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_users', 'user_id', 'role_id');
+    }
+
+    /**
+     * Get the account details associated with the user.
+     */
+    public function accountDetails()
+    {
+        return $this->hasOne('Backpack\CRUD\Tests\Unit\Models\AccountDetails');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESORS
+    |--------------------------------------------------------------------------
+    */
+    public function getFullNameAttribute(){
+	return "{$this->name} {$this->app} {$this->apm}";
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+     select 
+    users.name, 
+ roles.id,
+ roles.name,
+ escuelasnormales.nombre 
+ from users 
+ inner join role_users 
+ inner join roles 
+ inner join escuelasnormales
+ where users.id=role_users.user_id 
+ and roles.id=role_users.role_id
+ and users.idescuelanormal=escuelasnormales.id
+ order by escuelasnormales.nombre, roles.name
+
+
+ select 
+ users.name, 
+ roles.id,
+ roles.name,
+ escuelasnormales.nombre,
+ cursos.descripcionCurso
+ from users 
+ inner join role_users 
+ inner join roles 
+ inner join escuelasnormales
+ inner join cursos
+ where users.id=role_users.user_id 
+ and roles.id=role_users.role_id
+ and users.idescuelanormal=escuelasnormales.id
+ and roles.name='DOCENTE'
+ and users.id_curso=cursos.id_curso
+ order by escuelasnormales.nombre, roles.name
+
+
+
+  select 
+ escuelasnormales.nombre as normal,
+ roles.name,
+ users.name, 
+ users.app,
+ users.apm,
+ cursos.descripcionCurso as curso,
+ grupos.descripcion as grupo
+ from users 
+ join role_users 
+ join roles 
+ join escuelasnormales
+ join cursos
+ join grupos
+ join curso_grupos
+ where users.id=role_users.user_id 
+ and roles.id=role_users.role_id
+ and users.idescuelanormal=escuelasnormales.id
+ and roles.name='DOCENTE'
+ and users.id_curso=cursos.id_curso
+ and cursos.id_curso=curso_grupos.curso_id
+ and grupos.id_Grupos=curso_grupos.grupo_id
+ and grupos.idescuelanormal=1
+ order by escuelasnormales.nombre, roles.name
+
+
+    */
+}

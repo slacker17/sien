@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Validation\Rule;
+use App\Http\Requests\Request;
+use Illuminate\Foundation\Http\FormRequest;
+
+class AlumnoRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        // only allow updates if the user is logged in
+        return \Auth::check();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        //$alumno = Alumno::find($this->alumnos);
+
+        return [
+            // 'name' => 'required|min:5|max:255'
+            'nombre'        => 'required|max:50',
+            'app'           => 'required|max:50',
+            'apm'           => 'required|max:50',
+            // La siguiente validacion de unique es principalmente para el Update del CRUD, (para que funcione de forma correcta).
+            // Requerido|tamaño:18 caracteres|unico en DB,, a la tabla alumnos,, el campo curp,, el id (obtenido del request en el formulario asi se llama el input y obtenido a traves de $this que lo contiene) del row a modificar (objeto acutal modificando),, especificacion del nombre del campo id (por default en modelos laravel es id, pero en este caso es id_Alumno)  
+            'curp'          => 'required|size:18|unique:alumnos,curp,'.$this->id_Alumno.',id_Alumno', 
+            'domicilio'     => 'required',
+            'telefono'      => 'required|integer',
+            'localidad'     => 'required',
+            'municipio'     => 'required',
+            'estado'        => 'required',
+            'correo'        => 'required|email|unique:alumnos,correo,'.$this->id_Alumno.',id_Alumno',
+            'capacidadDiferente' => 'required',
+            'idescuelanormal' => 'required',
+            'status'	    => 'required',
+
+            //'matricula' => 'required|size:12',
+            'celular' => 'required',
+            'estado_civil' => 'required',
+            'sexo' => 'required',
+            'servicio_medico' => 'required',
+            'contacto_accidente' => 'required',
+            'tel_accidente' => 'required',
+            'direccion_accidente' => 'required',
+        ];
+    }
+
+    /**
+     * Get the validation attributes that apply to the request.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            //
+        ];
+    }
+
+    /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            // REQUIRED
+            'nombre.required'       => 'El nombre es requerido.',
+            'app.required'          => 'El apellido paterno es requerido.',
+            'apm.required'          => 'El apellido materno es requerido.',
+            'curp.required'         => 'La CURP es requerida.',
+            'domicilio.required'    => 'El domicilio es requerido',
+            'telefono.required'     => 'El teléfono es requerido.',
+            'localidad.required'    => 'La localidad es requerida.',
+            'municipio.required'    => 'El municipio es requerido.',
+            'estado.required'       => 'El estado es requerido.',
+            'correo.required'       => 'El correo es requerido.',
+            'capacidadDiferente.required'    => 'La capacidad es requerida.',
+            'idescuelanormal.required'       => 'La escuela normal es requerida.',
+            'status.required'       => 'El estado es requerido.',
+
+            'matricula.required' => 'La matricula es requerida',
+            //'celular.required' => 'El teléfono celular es requerido.', 
+            'estado_civil.required' => 'El estado civil es requerido.',
+            'sexo.required' => 'El sexo es requerido',
+            'servicio_medico.required' => 'El servicio médico es requerido.',
+            'contacto_accidente.required' => 'El nombre de contacto en caso de accidente es requerido.',
+            'tel_accidente.required' => 'El teléfono de contacto en caso de accidente es requerido',
+            'direccion_accidente.required' => 'El domicilio de contacto en caso de accidente es requerido',
+
+            // FORMAT
+            'telefono.integer'      => 'El teléfono debe ser de numeros enteros (ejem. 2461234567)',
+            'correo.email'          => 'Correo electrónico inválido',
+
+            // UNIQUE DB
+            'correo.unique'         => 'El correo electrónico proporcionado ya esta registrado.',
+            'curp.unique'           => 'La CURP proporcionada ya esta registrada.',
+
+            // Size
+            'curp.size'             => 'La CURP debe ser de 18 caracteres.',
+            //'matricula.size'        => 'La matricula debe ser de 12 caracteres.',
+        ];
+    }
+}

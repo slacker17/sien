@@ -1,0 +1,534 @@
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Versión del servidor:         5.7.9 - MySQL Community Server (GPL)
+-- SO del servidor:              Win64
+-- HeidiSQL Versión:             9.3.0.4984
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Volcando estructura para tabla usuarioslaravel.alumnos
+DROP TABLE IF EXISTS `alumnos`;
+CREATE TABLE IF NOT EXISTS `alumnos` (
+  `id_Alumno` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `app` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `apm` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `curp` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `domicilio` mediumtext COLLATE utf8mb4_unicode_ci,
+  `localidad` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `municipio` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `estado` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correo` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telefono` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `capacidadDiferente` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `idescuelanormal` int(10) DEFAULT NULL,
+  `idgrupo` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id_Alumno`),
+  UNIQUE KEY `curp` (`curp`),
+  KEY `idescuelanormal` (`idescuelanormal`),
+  KEY `idgrupo` (`idgrupo`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.alumnos: 9 rows
+/*!40000 ALTER TABLE `alumnos` DISABLE KEYS */;
+REPLACE INTO `alumnos` (`id_Alumno`, `nombre`, `app`, `apm`, `curp`, `domicilio`, `localidad`, `municipio`, `estado`, `correo`, `telefono`, `capacidadDiferente`, `created_at`, `updated_at`, `idescuelanormal`, `idgrupo`) VALUES
+	(1, 'PEPITO1', 'PEPITO1', 'PEPITO1', 'AUFV940717HTLGRL08', 'PEPITO1', 'PEPITP', 'PEPITO', 'PEPITO', 'pepito@gmail.com', '2461207461', 'NO', '2018-04-26 15:41:13', '2018-04-26 18:50:23', 1, NULL),
+	(3, 'PEPITO33', 'PEPITO3', 'PEPITO3', 'AUFV940717HTLGRL02', 'PEPITO3', 'PEPITO3', 'PEPITO3', 'PEPITO3', 'pepito3@gmail.com', '2461207461', 'NO', '2018-04-26 16:00:43', '2018-04-26 18:52:40', 2, NULL),
+	(4, 'PEPITO4', 'PEPITO4', 'PEPITO4', 'AUFV940717HTLGRL03', 'PEPITO4', 'PEPITO4', 'PEPITO4', 'PEPITO4', 'pepito4@gmail.com', '2461207461', 'SI', '2018-04-26 16:05:33', '2018-04-26 16:05:33', 2, NULL),
+	(5, 'PEPITO5', 'PEPITO5', 'PEPITO5', 'AUFV940717HTLGRL04', 'PEPITO5', 'PEPITO5', 'PEPITO5', 'PEPITO5', 'pepito5@gmail.com', '2461207461', 'SI', '2018-04-26 16:08:22', '2018-04-26 16:08:22', 3, NULL),
+	(6, 'PEPITO6', 'PEPITO6', 'PEPITO6', 'AUFV940717HTLGRL05', 'PEPITO6', 'PEPITO6', 'PEPITO6', 'PEPITO6', 'pepito6@gmail.com', '2467894512', 'NO', '2018-04-26 16:09:42', '2018-04-26 16:09:42', 3, NULL),
+	(7, 'PEPITO7', 'PEPITO7', 'PEPITO7', 'AUFV940717HTLGRL06', 'PEPITO7', 'PEPITO7', 'PEPITO7', 'PEPITO7', 'pepito7@gmail.com', '2461254578', 'NO', '2018-04-26 16:11:40', '2018-04-26 16:11:40', 4, NULL),
+	(8, 'PEPITO8', 'PEPITO8', 'PEPITO8', 'AUFV940717HTLGRL07', 'PEPITO8', 'PEPITO8', 'PEPITO8', 'PEPITO8', 'pepito8@gmail.com', '2227654312', 'SI', '2018-04-26 16:12:18', '2018-04-26 16:12:18', 4, NULL),
+	(9, 'PEPITO9', 'PEPITO9', 'PEPITO9', 'AUFV940717HTLGRL09', 'PEPITO9', 'PEPITO9', 'PEPITO9', 'PEPITO9', 'pepito9@gmail.com', '2465871422', 'SI', '2018-04-26 16:15:17', '2018-05-04 19:46:06', 5, 2),
+	(10, 'PEPITO10000000\r\n', 'PEPITO1000000', 'PEPITO10000000', 'AUFV940717HTLGRL11', 'PEPITO10', 'PEPITO10', 'PEPITO10', 'PEPITO10', 'pepito10@gmail.com', '2227654312', 'NO', '2018-04-26 16:16:37', '2018-05-02 17:59:26', 5, 2);
+/*!40000 ALTER TABLE `alumnos` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.calificaciones
+DROP TABLE IF EXISTS `calificaciones`;
+CREATE TABLE IF NOT EXISTS `calificaciones` (
+  `id_calificacion` int(10) NOT NULL AUTO_INCREMENT,
+  `id_alumno` int(10) DEFAULT NULL,
+  `id_curso` int(10) DEFAULT NULL,
+  `calificacion` int(4) DEFAULT NULL,
+  `unidad` int(10) DEFAULT NULL,
+  `asistencia` int(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id_calificacion`),
+  KEY `id_alumno` (`id_alumno`),
+  KEY `id_curso` (`id_curso`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla usuarioslaravel.calificaciones: 8 rows
+/*!40000 ALTER TABLE `calificaciones` DISABLE KEYS */;
+REPLACE INTO `calificaciones` (`id_calificacion`, `id_alumno`, `id_curso`, `calificacion`, `unidad`, `asistencia`, `created_at`, `updated_at`) VALUES
+	(1, 9, 2, 7, 4, 7, '2018-05-11 15:18:19', '2018-05-11 15:36:42'),
+	(2, 9, 2, 8, 3, 5, '2018-05-11 15:25:53', '2018-05-11 15:27:37'),
+	(3, 9, 2, 6, 1, 6, '2018-05-11 15:40:00', '2018-05-11 15:40:04'),
+	(4, 9, 2, 9, 2, 10, '2018-05-11 15:42:00', '2018-05-11 15:42:03'),
+	(5, 10, 2, 8, 3, 8, '2018-05-11 15:46:09', '2018-05-11 15:50:35'),
+	(6, 10, 2, 7, 1, 6, '2018-05-11 16:23:50', '2018-05-11 16:33:00'),
+	(7, 10, 2, 5, 2, 7, '2018-05-11 16:33:25', '2018-05-11 16:49:23'),
+	(8, 10, 2, 6, 4, 9, '2018-05-11 16:49:27', '2018-05-11 16:49:40');
+/*!40000 ALTER TABLE `calificaciones` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.cursos
+DROP TABLE IF EXISTS `cursos`;
+CREATE TABLE IF NOT EXISTS `cursos` (
+  `id_curso` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descripcionCurso` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `duracionHras` int(11) DEFAULT NULL,
+  `numeroUnidades` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id_curso`)
+) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.cursos: 56 rows
+/*!40000 ALTER TABLE `cursos` DISABLE KEYS */;
+REPLACE INTO `cursos` (`id_curso`, `descripcionCurso`, `duracionHras`, `numeroUnidades`, `created_at`, `updated_at`) VALUES
+	(1, 'El sujeto y su formación profesional como docente', 4, 3, '2018-04-16 16:07:24', '2018-04-16 16:07:24'),
+	(2, 'Psicología del desarrollo infantil (0-12 años)', 4, 4, '2018-04-16 16:08:13', '2018-04-16 16:08:13'),
+	(3, 'Historia de la Educación en México', 4, 4, '2018-04-16 16:08:55', '2018-04-16 16:23:01'),
+	(4, 'Panorama actual de la educación básica en México', 4, 3, '2018-04-16 16:24:19', '2018-04-16 16:24:19'),
+	(5, 'Aritmética: su aprendizaje y enseñanza', 6, 4, '2018-04-16 16:25:32', '2018-04-16 16:25:32'),
+	(6, 'Desarrollo físico y salud', 4, 3, '2018-04-16 16:26:09', '2018-04-16 16:26:09'),
+	(7, 'Las TIC en la educación', 4, 4, '2018-04-16 16:26:39', '2018-04-16 16:26:39'),
+	(8, 'Observación y análisis de la práctica educativa', 6, 3, '2018-04-16 16:27:27', '2018-04-16 16:27:27'),
+	(9, 'Planeación  educativa', 4, 3, '2018-04-16 16:32:52', '2018-04-16 16:32:52'),
+	(10, 'Bases psicológicas del aprendizaje', 4, 3, '2018-04-16 16:34:45', '2018-04-16 16:34:45'),
+	(11, 'Prácticas sociales del lenguaje', 6, 3, '2018-04-16 16:40:10', '2018-04-16 16:40:10'),
+	(12, 'Álgebra: su aprendizaje y enseñanza', 6, 3, '2018-04-16 16:41:46', '2018-04-16 16:41:46'),
+	(13, 'Acercamiento a las Ciencias Naturales en la primaria', 6, 4, '2018-04-16 16:58:56', '2018-04-16 16:58:56'),
+	(14, 'La tecnología informática aplicada a los centros escolares', 4, 3, '2018-04-16 16:59:40', '2018-04-16 16:59:40'),
+	(15, 'Observación y análisis de la práctica escolar', 6, 3, '2018-04-16 17:00:39', '2018-04-16 17:00:39'),
+	(16, 'Adecuación curricular', 4, 4, '2018-04-16 17:01:24', '2018-04-16 17:01:24'),
+	(17, 'Ambientes de aprendizaje', 4, 3, '2018-04-16 17:01:56', '2018-04-16 17:01:56'),
+	(18, 'Educación histórica en el aula', 4, 2, '2018-04-16 17:06:53', '2018-04-16 17:06:53'),
+	(19, 'Procesos de alfabetización inicial', 6, 2, '2018-04-16 17:09:58', '2018-04-16 17:09:58'),
+	(20, 'Geometría: su aprendizaje y enseñanza', 6, 3, '2018-04-16 17:11:10', '2018-04-16 17:11:10'),
+	(21, 'Ciencias Naturales', 6, 3, '2018-04-16 17:11:33', '2018-04-16 17:11:33'),
+	(22, 'Inglés A1', 4, 3, '2018-04-16 17:11:59', '2018-04-16 17:11:59'),
+	(23, 'Iniciación al trabajo docente', 6, 3, '2018-04-16 17:13:20', '2018-04-16 17:13:20'),
+	(24, 'Teoría pedagógica', 4, 3, '2018-04-16 17:13:57', '2018-04-16 17:13:57'),
+	(25, 'Evaluación para el aprendizaje', 4, 3, '2018-04-16 17:14:18', '2018-04-16 17:14:18'),
+	(26, 'Educación histórica en diversos contextos', 4, 4, '2018-04-16 17:15:32', '2018-04-16 17:15:32'),
+	(27, 'Estrategias didácticas con propósitos comunicativos', 6, 3, '2018-04-16 17:17:08', '2018-04-16 17:17:08'),
+	(28, 'Procesamiento de información estadística', 6, 4, '2018-04-16 17:18:54', '2018-04-16 17:18:54'),
+	(29, 'Optativo 4', 4, 3, '2018-04-16 17:19:18', '2018-04-16 17:42:34'),
+	(30, 'Inglés A2', 4, 4, '2018-04-16 17:19:35', '2018-04-16 17:19:35'),
+	(31, 'Estrategias de trabajo docente', 6, 2, '2018-04-16 17:20:15', '2018-04-16 17:20:15'),
+	(32, 'Herramientas básicas para la investigación educativa', 4, 3, '2018-04-16 17:21:30', '2018-04-16 17:21:30'),
+	(33, 'Atención a la diversidad', 4, 3, '2018-04-16 17:22:55', '2018-04-16 17:22:55'),
+	(34, 'Educación Física', 4, 2, '2018-04-16 17:23:31', '2018-04-16 17:23:31'),
+	(35, 'Producción de textos escritos', 6, 3, '2018-04-16 17:24:13', '2018-04-16 17:24:13'),
+	(36, 'Educación artística (Música, expresión corporal y danza)', 4, 3, '2018-04-16 17:25:31', '2018-04-16 17:25:31'),
+	(37, 'Optativo 5', 4, 3, '2018-04-16 17:25:59', '2018-04-16 17:42:58'),
+	(38, 'Inglés B1 -', 4, 3, '2018-04-16 17:26:52', '2018-04-16 17:50:03'),
+	(39, 'Trabajo docente e innovación', 6, 3, '2018-04-16 17:27:35', '2018-04-16 17:27:35'),
+	(40, 'Filosofía de la educación', 4, 3, '2018-04-16 17:28:16', '2018-04-16 17:28:16'),
+	(41, 'Diagnóstico e intervención socioeducativa', 4, 3, '2018-04-16 17:29:39', '2018-04-16 17:29:39'),
+	(42, 'Formación cívica y ética', 4, 3, '2018-04-16 17:30:26', '2018-04-16 17:30:26'),
+	(43, 'Educación geográfica', 4, 3, '2018-04-16 17:30:51', '2018-04-16 17:30:51'),
+	(44, 'Educación artística (Artes visuales y teatro)', 4, 3, '2018-04-16 17:31:54', '2018-04-16 17:31:54'),
+	(45, 'Optativo 6', 4, 3, '2018-04-16 17:32:27', '2018-04-16 17:43:11'),
+	(46, 'Inglés B1', 4, 3, '2018-04-16 17:32:57', '2018-04-16 17:32:57'),
+	(47, 'Proyectos de intervención socioeducativa', 6, 2, '2018-04-16 17:33:55', '2018-04-16 17:33:55'),
+	(48, 'Planeación  y gestión educativa', 4, 3, '2018-04-16 17:35:09', '2018-04-16 17:35:09'),
+	(49, 'Atención educativa para la inclusión', 4, 2, '2018-04-16 17:36:31', '2018-04-16 17:36:31'),
+	(50, 'Formación ciudadana', 4, 2, '2018-04-16 17:36:53', '2018-04-16 17:36:53'),
+	(51, 'Aprendizaje y enseñanza de la geografía', 4, 2, '2018-04-16 17:37:28', '2018-04-16 17:37:28'),
+	(52, 'Optativo 7', 4, 2, '2018-04-16 17:37:50', '2018-04-16 17:37:50'),
+	(53, 'Inglés B2 -', 4, 4, '2018-04-16 17:38:30', '2018-04-16 17:50:43'),
+	(54, 'Práctica profesional 7', 6, 1, '2018-04-16 17:39:03', '2018-04-16 17:51:06'),
+	(55, 'Trabajo de titulación', 4, 1, '2018-04-16 17:39:37', '2018-04-16 17:39:37'),
+	(56, 'Práctica profesional 8', 20, 1, '2018-04-16 17:40:28', '2018-04-16 17:51:31');
+/*!40000 ALTER TABLE `cursos` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.curso_grupos
+DROP TABLE IF EXISTS `curso_grupos`;
+CREATE TABLE IF NOT EXISTS `curso_grupos` (
+  `curso_id` int(10) unsigned NOT NULL,
+  `grupo_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`curso_id`,`grupo_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla usuarioslaravel.curso_grupos: 63 rows
+/*!40000 ALTER TABLE `curso_grupos` DISABLE KEYS */;
+REPLACE INTO `curso_grupos` (`curso_id`, `grupo_id`) VALUES
+	(1, 2),
+	(1, 3),
+	(1, 4),
+	(1, 5),
+	(1, 6),
+	(1, 7),
+	(1, 8),
+	(2, 2),
+	(2, 3),
+	(2, 4),
+	(2, 5),
+	(2, 6),
+	(2, 7),
+	(2, 8),
+	(3, 2),
+	(3, 3),
+	(3, 4),
+	(3, 5),
+	(3, 6),
+	(3, 7),
+	(3, 8),
+	(4, 2),
+	(4, 3),
+	(4, 4),
+	(4, 5),
+	(4, 6),
+	(4, 7),
+	(4, 8),
+	(5, 2),
+	(5, 3),
+	(5, 4),
+	(5, 5),
+	(5, 6),
+	(5, 7),
+	(5, 8),
+	(6, 2),
+	(6, 3),
+	(6, 4),
+	(6, 5),
+	(6, 6),
+	(6, 7),
+	(6, 8),
+	(7, 2),
+	(7, 3),
+	(7, 4),
+	(7, 5),
+	(7, 6),
+	(7, 7),
+	(7, 8),
+	(8, 2),
+	(8, 3),
+	(8, 4),
+	(8, 5),
+	(8, 6),
+	(8, 7),
+	(8, 8),
+	(9, 9),
+	(10, 9),
+	(11, 9),
+	(12, 9),
+	(13, 9),
+	(14, 9),
+	(15, 9);
+/*!40000 ALTER TABLE `curso_grupos` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.curso_users
+DROP TABLE IF EXISTS `curso_users`;
+CREATE TABLE IF NOT EXISTS `curso_users` (
+  `curso_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`curso_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla usuarioslaravel.curso_users: 0 rows
+/*!40000 ALTER TABLE `curso_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `curso_users` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.escuelasnormales
+DROP TABLE IF EXISTS `escuelasnormales`;
+CREATE TABLE IF NOT EXISTS `escuelasnormales` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `escuelasnormales_nombre_unique` (`nombre`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.escuelasnormales: 5 rows
+/*!40000 ALTER TABLE `escuelasnormales` DISABLE KEYS */;
+REPLACE INTO `escuelasnormales` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+	(1, 'CAM', '2018-04-19 15:15:56', '2018-04-19 15:15:56'),
+	(2, 'NORMAL PREESCOLAR', '2018-04-19 15:16:36', '2018-04-19 15:16:36'),
+	(3, 'NORMAL PRIMARIA TEACALCO', '2018-04-19 15:17:07', '2018-04-19 15:17:07'),
+	(4, 'NORMAL RURAL', '2018-04-19 15:17:25', '2018-04-19 15:17:25'),
+	(5, 'NORMAL URBANA FEDERAL', '2018-04-19 15:17:40', '2018-04-19 15:17:40');
+/*!40000 ALTER TABLE `escuelasnormales` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.grupos
+DROP TABLE IF EXISTS `grupos`;
+CREATE TABLE IF NOT EXISTS `grupos` (
+  `id_Grupos` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_profesor` int(11) DEFAULT NULL,
+  `id_curso` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `descripcion` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idescuelanormal` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id_Grupos`),
+  KEY `id_profesor` (`id_profesor`),
+  KEY `id_curso` (`id_curso`),
+  KEY `idescuelanormal` (`idescuelanormal`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.grupos: 8 rows
+/*!40000 ALTER TABLE `grupos` DISABLE KEYS */;
+REPLACE INTO `grupos` (`id_Grupos`, `id_profesor`, `id_curso`, `created_at`, `updated_at`, `descripcion`, `idescuelanormal`) VALUES
+	(2, 30, 1, '2018-04-27 21:21:09', '2018-04-27 21:21:09', '1° A', 5),
+	(3, NULL, NULL, '2018-04-30 17:14:49', '2018-04-30 17:14:49', '1° B', 5),
+	(4, NULL, NULL, '2018-04-30 17:19:12', '2018-04-30 17:19:12', '1° C', 5),
+	(5, NULL, NULL, '2018-04-30 17:23:22', '2018-04-30 17:23:22', '1° A', 4),
+	(6, NULL, NULL, '2018-04-30 17:29:27', '2018-04-30 17:29:27', '1° A', 3),
+	(7, NULL, NULL, '2018-05-02 15:17:07', '2018-05-02 15:17:07', '1° A', 1),
+	(8, NULL, NULL, '2018-05-02 16:01:15', '2018-05-02 16:01:15', '1° B', 1),
+	(9, NULL, NULL, '2018-05-02 16:14:30', '2018-05-02 16:14:30', '2° A', 2);
+/*!40000 ALTER TABLE `grupos` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.matriculas
+DROP TABLE IF EXISTS `matriculas`;
+CREATE TABLE IF NOT EXISTS `matriculas` (
+  `id_Matriculas` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_Curso` int(11) DEFAULT NULL,
+  `id_Alumno` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id_Matriculas`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.matriculas: 0 rows
+/*!40000 ALTER TABLE `matriculas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `matriculas` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.migrations
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.migrations: 6 rows
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+REPLACE INTO `migrations` (`id`, `migration`, `batch`) VALUES
+	(1, '2014_10_12_000000_create_users_table', 1),
+	(2, '2014_10_12_100000_create_password_resets_table', 1),
+	(3, '2016_05_10_130540_create_permission_tables', 2),
+	(4, '2018_04_19_143008_create_escuelasnormales_table', 3),
+	(5, '2018_04_19_154259_create_role_escuelanormal_table', 4),
+	(6, '2018_04_23_182737_create_base_tables', 5);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.password_resets
+DROP TABLE IF EXISTS `password_resets`;
+CREATE TABLE IF NOT EXISTS `password_resets` (
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.password_resets: 0 rows
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.permissions
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE IF NOT EXISTS `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_name_unique` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.permissions: 0 rows
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.permission_roles
+DROP TABLE IF EXISTS `permission_roles`;
+CREATE TABLE IF NOT EXISTS `permission_roles` (
+  `permission_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`permission_id`,`role_id`),
+  KEY `permission_roles_role_id_foreign` (`role_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.permission_roles: 2 rows
+/*!40000 ALTER TABLE `permission_roles` DISABLE KEYS */;
+REPLACE INTO `permission_roles` (`permission_id`, `role_id`) VALUES
+	(1, 2),
+	(2, 1);
+/*!40000 ALTER TABLE `permission_roles` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.permission_users
+DROP TABLE IF EXISTS `permission_users`;
+CREATE TABLE IF NOT EXISTS `permission_users` (
+  `user_id` int(10) unsigned NOT NULL,
+  `permission_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`,`permission_id`),
+  KEY `permission_users_permission_id_foreign` (`permission_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.permission_users: 0 rows
+/*!40000 ALTER TABLE `permission_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permission_users` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.roles
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.roles: 5 rows
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+REPLACE INTO `roles` (`id`, `name`, `created_at`, `updated_at`) VALUES
+	(1, 'DIRECTOR', '2018-04-19 16:13:37', '2018-04-19 16:13:37'),
+	(2, 'ADMINISTRATIVO', '2018-04-19 16:13:50', '2018-04-19 16:13:50'),
+	(3, 'DOCENTE', '2018-04-19 16:13:58', '2018-04-19 16:13:58'),
+	(4, 'SUBDIRECTOR ACADÉMICO', '2018-04-19 16:14:18', '2018-04-19 16:14:18'),
+	(5, 'Admin', '2018-04-23 20:50:16', '2018-04-23 20:50:16');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.role_users
+DROP TABLE IF EXISTS `role_users`;
+CREATE TABLE IF NOT EXISTS `role_users` (
+  `role_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`role_id`,`user_id`),
+  KEY `role_users_user_id_foreign` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.role_users: 38 rows
+/*!40000 ALTER TABLE `role_users` DISABLE KEYS */;
+REPLACE INTO `role_users` (`role_id`, `user_id`) VALUES
+	(1, 2),
+	(1, 3),
+	(1, 5),
+	(1, 6),
+	(1, 7),
+	(1, 11),
+	(1, 12),
+	(1, 16),
+	(1, 20),
+	(1, 24),
+	(1, 28),
+	(2, 13),
+	(2, 17),
+	(2, 21),
+	(2, 25),
+	(2, 29),
+	(3, 9),
+	(3, 14),
+	(3, 18),
+	(3, 22),
+	(3, 26),
+	(3, 30),
+	(3, 81),
+	(3, 82),
+	(3, 83),
+	(3, 84),
+	(3, 85),
+	(3, 86),
+	(3, 87),
+	(3, 88),
+	(4, 10),
+	(4, 15),
+	(4, 19),
+	(4, 23),
+	(4, 27),
+	(4, 31),
+	(5, 1),
+	(5, 32);
+/*!40000 ALTER TABLE `role_users` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla usuarioslaravel.users
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `app` varchar(70) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `apm` varchar(70) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `curp` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `domicilio` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telefono` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correo` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `idescuelanormal` int(10) DEFAULT NULL,
+  `username` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_curso` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  UNIQUE KEY `username` (`username`),
+  KEY `idescuelanormal` (`idescuelanormal`),
+  KEY `id_curso` (`id_curso`)
+) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla usuarioslaravel.users: 30 rows
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+REPLACE INTO `users` (`id`, `name`, `email`, `password`, `app`, `apm`, `curp`, `domicilio`, `telefono`, `correo`, `remember_token`, `created_at`, `updated_at`, `idescuelanormal`, `username`, `id_curso`) VALUES
+	(1, 'admin', 'aguila1794@gmail.com', '$2y$10$MMfv70Ani5NidU5ET3USxOz3W23FdIl7TpodqNgEJwMVbZAEiG.3S', NULL, NULL, NULL, NULL, NULL, NULL, 'RyRwC8sDwDw4sUZ0BDEKxKGDBa3rlobdXiEhKhh4FwMSD7T1G7Xjhc8DvWOF', '2018-04-19 14:24:23', '2018-04-19 14:24:23', NULL, 'admin', NULL),
+	(14, 'ALONDRA', 'alondra@gmail.com', '$2y$10$sEtGqF8LzCgZAM/qYbnsseGhSedhyZZ8Q/8lEraNlhpRRD5dcenuK', 'JIMÉNEZ', 'PÉREZ', 'AUFV940717HTLGRL08', 'AVENIDA TZIANO FERRO NO 34', '2221236547', NULL, 'jTX3FOMZ8KG31WUtvM7it0AmJ1hSrnLXN1ovqHpwxuvUVtIElNS02PhAFpHn', '2018-04-20 17:54:58', '2018-05-02 14:23:43', 1, 'alondra1', 1),
+	(13, 'JOSE', 'jose@gmail.com', '$2y$10$16cnenytMoPAidIUoE8D/evkXo1FFlVg1cCXCN2oSQzKqLNrhu3fa', 'ALVAREZ', 'JUAREZ', 'AUFV940717HTLGRL08', 'CALLE JOSE MARIA Y MORELOS NO. 20', '2465213698', NULL, 'paHeLKKKhVJFWTxNBIjaKziHaLeU9gfj08GYkbkAhiVPiV0FUnVvcLQt3Ww0', '2018-04-20 17:52:42', '2018-04-20 17:52:42', 1, 'jose1', NULL),
+	(12, 'VALENTIN', 'vale.af17@gmail.com', '$2y$10$IiP98unNAVwSNUDt2oKZcO3yjBqRiCRvtrsv4o48hF4rZssf56bY.', 'AGUILA', 'FERNANDEZ', 'AUFV940717HTLGRL08', 'Av. Insurgentes No. 2 Sección Sexta, Teolocholco, Tlaxcala', '2461207461', NULL, 'hKEWQG957g6tQEfuv4QTTtco5T4xIYca3r6IAxIhSCc1GXik67uK0NcRsTcP', '2018-04-20 14:02:15', '2018-04-20 14:02:15', 1, 'valentin1', NULL),
+	(15, 'MAURICIO', 'mauricio@gmail.com', '$2y$10$9LOyWfLG0vN/vV7ouPFAsOxozsUXn0zNm/grzseIWiHVgIngX73Me', 'CORDOBA', 'LIMA', 'AUFV940717HTLGRL08', 'CALLE IGNACIO ZARAGOZA NO 22', '2465897412', NULL, 'Xgru0Hat3QCQqBxM7pEdj4P8NFYT4IZF5HcqVcOlRIOiZK0bnNLsxYyw2mfc', '2018-04-20 17:56:51', '2018-04-20 17:56:51', 1, 'mauricio1', NULL),
+	(16, 'CARLOS', 'carlos@gmail.com', '$2y$10$ayQX9h4SmsapBybu0xoFmef6ocPX/Tcv/dQlBN1.kvHhVP96ccArS', 'GUERRERO', 'MORALES', 'AUFV940717HTLGRL08', 'AV. ZARAGOZA NO 67', '2467896351', NULL, NULL, '2018-04-20 18:00:25', '2018-04-20 18:00:25', 2, 'carlos1', NULL),
+	(17, 'MIRIAM', 'miriam@gmail.com', '$2y$10$cEeA61Lz0yPQS4OnO7uVO.2BxFD1qaGcEI9CA2zV6FU6St./hqLrG', 'GUTIERREZ', 'SANDOVAL', 'AUFV940717HTLGRL08', 'CALLE JOSE MARIA Y MORELOS NO 65', '2222223366', NULL, 'pDTB187Kr1Cw60RPVMP2Ik4PRvZSOXjfdjwBVSkzAX1mF5ebj7K4VjgsQ7Zw', '2018-04-20 18:03:40', '2018-04-20 18:03:40', 2, 'miriam1', NULL),
+	(18, 'KARLA', 'karla@gmail.com', '$2y$10$PfQz6vovf92JWziDAtppqeAWiCgg1bvy0UVvzxiECrBKL6AydIPpG', 'LIMA', 'LIMA', 'AUFV940717HTLGRL08', 'AV. KILOMETRO 34', '2461569825', NULL, 'Tbb3J610YvrJfISvocS1JqxYzq8OBMy6jsKw869zgIU9rTzT4PpJXmIEX0yT', '2018-04-20 18:05:54', '2018-05-02 16:15:06', 2, 'karla1', 9),
+	(19, 'GUSTAVO', 'gustavo@gmail.com', '$2y$10$hxN8SIU/WpYdc3Xu6lAC9.HE/hV6FfCYa3d.7Ar8RybkrYkSbMfhK', 'JIMENEZ', 'JIMENEZ', 'AUFV940717HTLGRL08', 'CALLE MARIANO ESCOBEDO NO 55', '2467895255', NULL, 'CymCAwFAL4ydNgAeuzRYnBNNlZnv9hEEhJ8kLJzqjkstNPozrTpUMrM6zR6C', '2018-04-20 18:09:06', '2018-04-20 18:09:06', 2, 'gustavo1', NULL),
+	(20, 'LAURA', 'laura@gmail.com', '$2y$10$taGXk1scV2SsIcMVcSNuEeNP8xA75f7LCn1OnWMmGAhnmUKfIqzsi', 'PALACIOS', 'JIMENEZ', 'AUFV940717HTLGRL08', 'CALLE FERNANDO MORAN NO 32', '2222222222', NULL, NULL, '2018-04-20 18:12:08', '2018-04-20 18:12:08', 3, 'laura1', NULL),
+	(21, 'ALICIA', 'alicia@gmail.com', '$2y$10$ttmj8QmiSiG57Ktyi9QClOUN.8pb.c/rdOCdElNEyWTnc01nIgByq', 'LIMA', 'PEREZ', 'AUFV940717HTLGRL08', 'CALLE LIRA Y ORTEGA NO 34', '2469876541', NULL, 'TbJprj09GKexYCVd15Mu6wIHLNRhxhUzGqLrhf8rSb49INiEKMWmYyLW0Qw8', '2018-04-20 18:14:21', '2018-04-20 18:14:21', 3, 'alicia1', NULL),
+	(22, 'LORENZO', 'lorenzo@gmail.com', '$2y$10$fXvhaF4pKCQS1UyGLn4gPOdUJ0cXWXSqZuffN2cU084ztuduErEB.', 'BAEZ', 'BAEZ', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2224561036', NULL, NULL, '2018-04-20 18:16:05', '2018-04-20 18:16:05', 3, 'lorenzo1', NULL),
+	(23, 'GIOVANNY', 'gio@gmail.com', '$2y$10$BnMn43Rb9xW4fipXiuLtMuq5SEDsvGHPtawIjHleOE2NNfdBqFhvm', 'JUAREZ', 'JUAREZ', 'AUFV940717HTLGRL08', 'CALLE KARKA NO 90', '2461047895', NULL, 'f5HuYw2JAGtG5QX6kaMfLmjCaHSKmuasTIqd30lc15OACg2jqeEXif2iWHSC', '2018-04-20 18:17:31', '2018-04-20 18:17:31', 3, 'gio1', NULL),
+	(24, 'JULIO', 'julio@gmail.com', '$2y$10$T2wPSith25tcIGyIsfxjV.gUIDpBxEEIZtvZRqDH0PRQ.qsP8NO5.', 'BASCONSUELOS', 'JIMENEZ', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2465214598', NULL, 'IbcVLLqVd5jJxu4YkvvTw8Vw12jzRo9nizAZcqxbEIiVKB0hPlhigmwND36H', '2018-04-20 18:20:32', '2018-04-20 18:20:32', 4, 'julio1', NULL),
+	(25, 'PABLO', 'pablo@gmail.com', '$2y$10$4Q6NA.baSLEqiWMd5QRJGe6CP1s.Tj7hmw7sVrqArhEidsIRKkHGK', 'ESCOBAR', 'JUAREZ', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2222223654', NULL, 'am5wk5Cdm2yIgwcruBtJ3wPgQuDITKyF5T9ORwJlWHjxww9VeOlkiqBoYsYO', '2018-04-20 18:21:53', '2018-04-20 18:21:53', 4, 'pablo1', NULL),
+	(26, 'ARTURO', 'arturo@gmail.com', '$2y$10$dTOzpf5gnumk5wPj5neWFeEF//0shhD8QmrFrxEvJnrVgfp8yrLhK', 'HIGUERA', 'HIGUERA', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461254578', NULL, 'vqglRhbkmA8rf3f9odLbBccaSPXaihDqfg5cQx264YXUhXSv6vxEwKKljsGG', '2018-04-20 18:23:33', '2018-04-20 18:23:33', 4, 'arturo1', NULL),
+	(27, 'SANDRA', 'sandra@gmail.com', '$2y$10$OrCfWtt32bsy56IqU/ranei7fbdk7aJ5Ij3lxZ3iIpXUUCnNA6e.G', 'TECPAN', 'TECPAN', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2465871422', NULL, 'M6EyrvVgsbOnndL96DRYE3GOrXy2nNMLTp9zz6n13TkiJsN86kk7pXwIZNg9', '2018-04-20 18:24:32', '2018-04-20 18:24:32', 4, 'sandra1', NULL),
+	(28, 'MIRNA', 'mirna@gmail.com', '$2y$10$cBTue9Y/7m1wCOYr489noO4eavtrLSQ/i7AvhfQlHL8y8tN.rsg1m', 'TEXNA', 'TEXNA', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2227654312', NULL, '8XVSPjeiim5rhreziETUYe0oEQ19tvBSwBdinohAKy85lQ6HmM8rEmS0e4tP', '2018-04-20 18:25:55', '2018-04-20 18:25:55', 5, 'mirna1', NULL),
+	(29, 'HECTOR', 'hector@gmail.com', '$2y$10$HbJLxdnANM7fjO1jGtgdF.eb8gKDAGE4CNDa7BuNbo2N8EAUKK1fq', 'ATONAL', 'ATONAL', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2465558899', NULL, 'oeJ6UhCzysUt9tABKX3SVw8eQCJ47lUAcipZfUDXlIv6Y3UKvgYnt8faJ6IA', '2018-04-20 18:30:22', '2018-04-20 18:30:22', 5, 'hector1', NULL),
+	(30, 'JAVIER', 'javier@gmail.com', '$2y$10$vGqGdCZ9JZ99Pj3p1qK6ZOa8i49mqkenlH7UYyQoOPuPVH0HfcdLe', 'SALAMANCA', 'SALAMANCA', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2465879865', NULL, 'IGPIFJAnfTmy8sk25GH1CgnUiEzfKw0s5lgNn7yZST1VnhVKu2koZKT9KJwY', '2018-04-20 18:32:58', '2018-05-04 17:27:19', 5, 'javier1', 1),
+	(31, 'EDER', 'eder@gmail.com', '$2y$10$lmR7/Z.KTwqJ1qpTuHFSNOqutlTuh.ecQ/8GLlV7KlxXXobeY73Za', 'PEREZ', 'JIMENEZ', 'AUFV940717HTLGRL08', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461254578', NULL, 'D0MMnmvKyNvTOdnCoQOfF7y6WeveHikNKy4xYRTlt0gABPnUgbDa4bPjKrPn', '2018-04-20 18:34:13', '2018-04-20 18:34:13', 5, 'eder1', NULL),
+	(32, 'admin2', 'valeaf17@icloud.com', '$2y$10$40rT7/h/3ufvJvav0Jyk3usijM.nTgUPG5GVoKovM.kRlXtEaHOay', NULL, NULL, NULL, NULL, NULL, NULL, '3nGHvXLWeXNSXVR7bqAxVviWHXVBJCsqtQTtTZ6gnthWIzbO6uYG9JCqiyhT', '2018-04-23 21:02:45', '2018-04-23 21:02:45', NULL, NULL, NULL),
+	(82, 'NONO1', 'nono@gmail.com', '$2y$10$ocaU3GCOJ9Tr/mrjaJ//aOWJWoKIKXoI7BdUtCRTf2K5qrwiqUjK2', 'NONO', 'NONO', 'AUFV940717HTLGRL11', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, '7QgcXbjbqps5nSN09bzBHwoqBnc5PkoryGQZ1tJQdKlhnRiqN3ocjIbhz8Z9', '2018-04-25 19:49:23', '2018-05-02 16:15:22', 2, 'nono1', 10),
+	(81, 'KAKA', 'kaka@gmail.com', '$2y$10$b.rM7Q9yOp0rrflK0hT4beuWgGqgzs6R.3G7wSjfxktp7cI/gU6zG', 'KAKA', 'KAKA', 'AUFV940717HTLGRL07', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'UejO0TF4UEiFwuwAlliy139ruWgHMIOOGMIo68azjpTHGNzexUNfA3GngGs6', '2018-04-25 19:43:55', '2018-05-02 15:14:06', 1, 'kaka1', 2),
+	(83, 'JAJA', 'jaja@gmail.com', '$2y$10$cCQV97fBEgGsY53OoINYY.Uj27.KLySr80N9PLNDiEaIDj.6ExekG', 'JAJA', 'JAJA', 'AUFV940717HTLGRL03', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'bHPLeC07aYiV1JOeN3BD89RWTFZc5gnrdCtq1nilkxrkFvOR9cZfy5uj5tec', '2018-04-25 20:08:24', '2018-05-02 15:17:22', 1, 'jaja1', 3),
+	(84, 'JIJI', 'jiji@gmail.com', '$2y$10$7MTrL9T6qw6ePbnEtHusPurs2Hwuvrx4NnQAze3wUHy97vpu7kMOi', 'JIJI', 'JIJI', 'AUFV940717HTLGRL05', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'DYq1HZ10LIeOpz2hnHbKqWt6Tesoj3QsoKnAQL7OYyFW2zunvyjLOUHhJfpq', '2018-04-25 21:27:12', '2018-05-02 15:38:48', 1, 'jiji1', 4),
+	(85, 'MIMI', 'mimi@gmail.com', '$2y$10$T3nq4MaXh8Nq3ikMA.gCROV6ls6O5.8iXrPZ/lITzQ8pyp.Wua9qy', 'MIMI', 'MIMI', 'AUFV940717HTLGRL00', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'VczG7VzxpiEgKFxjm2emZtkIndcnlOHh6izxKg3cSll35sfF0HxFm9h0Geyb', '2018-04-25 21:30:29', '2018-04-25 21:30:29', 3, 'MIMI1', NULL),
+	(86, 'JOJO', 'jojo@gmail.com', '$2y$10$6RCnuCH5FZqSN8rnG7T15u7TKuVLAMwv1sSbGXG9os3gvk6WvneRK', 'JOJO', 'JOJO', 'LOKIJUHYGTFRDESWZX', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'qpwNjkOQJsH3MlHHAX9YOZmL5iJclBl1chs7qAsUV8mpLYPBPMG0F3fkXgKP', '2018-04-25 21:42:18', '2018-04-25 21:42:18', 3, 'jojo1', NULL),
+	(87, 'PAN', 'pan@gmail.com', '$2y$10$wdes7w.7S/mOC4jhlqSS7O2mMl1x4MMHfWhVia8yygxFvzc3zNMM6', 'PAN', 'PAN', 'AUFV940717HTLGR107', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'AmVaQWU4U4Tp5u9jqwOsQ1CASNaMMbH4gcqWOOPR4UmDNRrMyA7QM2lFRhee', '2018-04-25 21:45:20', '2018-04-25 21:45:20', 4, 'pan1', NULL),
+	(88, 'OTRODOCENTE', 'otro@gmail.com', '$2y$10$GegGoOvtetjvuILOrq7INeNGC5z3KQ/oiJmfaPIBdvf4VjYARaBLa', 'OTRO', 'OTRO', 'AUFV940717HTLGRO01', 'AV. INSURGENTES NO. 2 SECCIÓN SEXTA, TEOLOCHOLCO, TLAXCALA', '2461207461', NULL, 'FwTo8aDhVYDecmxiuebeujiqPql4OkzIWqnzJIrDFMtOI9kYBUbNmTnZ4f0z', '2018-04-26 15:03:40', '2018-05-04 17:30:20', 5, 'otro1', 2);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

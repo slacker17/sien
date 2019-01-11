@@ -1,0 +1,148 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\CrudTrait;
+
+class Grupo extends Model
+{
+    use CrudTrait;
+
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL VARIABLES
+    |--------------------------------------------------------------------------
+    */
+    public $sufix = '/sien/public';
+    protected $table = 'grupos';
+    protected $primaryKey = 'id_Grupos';
+    // public $timestamps = false;
+    // protected $guarded = ['id'];
+    protected $fillable = ['descripcion', 'idescuelanormal', 'idadministrativo', 'semestre', 'grupo', 'idcicloescolar', 'cursado', 'plan_id'];
+    // protected $hidden = [];
+    // protected $dates = [];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
+
+    // Link para asignar el grupo a un administrativo
+    public function establecerAdministrativo($crud = false)
+    {
+        return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/asignagrupoadministrativo/'.$this->id_Grupos.'/edit"
+	data-toggle="tooltip" title="Asignar cursos."><i class="glyphicon glyphicon-list-alt"></i> Asignar Administrativo</a>';
+    }
+
+
+    // Link para establecer el horario del grupo
+    public function establecerCargaHoraria($crud = false)
+    {
+        return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/cargahoraria/'.
+                $this->id_Grupos.
+                '" data-toggle="tooltip" title="Carga horaria."><i class="glyphicon glyphicon-list-alt"></i> Carga Horaria</a>';
+    }
+
+    //  Link para lista de calificaciones y asistencia (usado por el rol docente)
+    public function calificacionYAsistencia($crud = false)
+    {
+        // Recibiremos el id del curso ***************
+        $curso_id_recibido = \Request::input('curso_id');
+        // href="/admin/asignaalumnogrupo/'.$this->id_Alumno.'/edit"
+        //  CRUD::resource('alumno/grupo/{idgrupo?}', 'AlumnoCrudController');
+        return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/altacalificacion/'.$this->id_Grupos.'?curso_id='.$curso_id_recibido.'" data-toggle="tooltip">
+                <i class="glyphicon glyphicon-plus"></i> Ver Alumnos</a>';
+    }
+
+    // Link para ver alumnos pertenecientes al grupo seleccionado    
+    public function verAlumnos($crud = false)
+    {
+        // href="/admin/asignaalumnogrupo/'.$this->id_Alumno.'/edit"
+        //  CRUD::resource('alumno/grupo/{idgrupo?}', 'AlumnoCrudController');
+        return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/alumno?grupo_id='.$this->id_Grupos.'" data-toggle="tooltip">
+                <i class="glyphicon glyphicon-user"></i> Ver Alumnos</a>';
+    }
+
+    // Link para agregar nuevo alumno ya existente en la bd al grupo (y que no tiene grupo)
+    public function agregarAlumnoExistenteDB($crud = false)
+    {
+        // href="/admin/asignaalumnogrupo/'.$this->id_Alumno.'/edit"
+        //  CRUD::resource('alumno/grupo/{idgrupo?}', 'AlumnoCrudController');
+        return '<a class="alexx btn btn-xs btn-default"  onClick="setIdGrupo('.$this->id_Grupos.')" id="grp-'.$this->id_Grupos.'" data-toggle="modal" data-target="#formAlumno">
+        <i class="glyphicon glyphicon-plus"></i> Agregar Alumno Existente </a>';
+        //return '<a class="btn btn-xs btn-default" target="_self" href="'.$this->sufix.'/admin/alumno/1/edit?grupo_id='.$this->id_Grupos.'" data-toggle="tooltip">
+        //        <i class="glyphicon glyphicon-plus"></i> Agregar Alumno Existente</a>';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+    /*public function profesores()
+    {
+      return $this->belongsTo('App\Models\Profesor', 'id_profesor', 'id');
+    }
+
+    public function cursos()
+    {
+      return $this->belongsTo('App\Models\Curso', 'id_curso', 'id_curso');
+    }*/
+
+    public function escuelasnormales()
+    {
+      return $this->belongsTo('App\Models\Escuelanormal', 'idescuelanormal', 'id');
+    }
+
+    // Tiene muchos cursos    
+    public function curso()
+    {
+        return $this->belongsToMany('App\Models\Curso', 'curso_grupos', 'grupo_id', 'curso_id');
+    }
+
+    /*
+     * Pertenece a un docente (user)
+     * usado para el rol subdirector academico
+     * (los grupos que estan asignanos a un administrativo)
+     */
+    public function administrativo(){
+    	return $this->belongsTo('App\User', 'idadministrativo', 'id');
+    }
+
+    /* Pertenece a un ciclo escolar */
+    public function cicloescolar(){
+        return $this->belongsTo('App\Models\Cicloescolar', 'idcicloescolar', 'id');
+    }
+    
+    /* Pertenece a un plan de estudios*/
+    public function plan(){
+        return $this->belongsTo('App\Models\Planestudio', 'plan_id', 'id');
+    }
+    
+	/*
+    public function grupo_curso_user(){
+    	return $this->hasOne('App\Grupo_curso_user');
+    }*/
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESORS
+    |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+    */
+}
